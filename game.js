@@ -56,8 +56,10 @@ function createChar() {
                 var defense = 20;
                 var luck = 50;
             }
+
             // Once the character is called, the first battle can start
             battle();
+            
         });
     
 }
@@ -74,9 +76,45 @@ function battle() {
         }
     ]).then(function (battleChoices)
     {
-        if (battleChoices.choices === "Attack!") 
+        if (battleChoices.Menu === "Attack!") 
         {
-            console.log("aaaa");
+            attack();
+        }
+        else if (battleChoices.Menu === "Guard!")
+        {
+            guard();
+        }
+        else if (battleChoices.Menu === "Enemy Info!")
+        {
+            displayInfo();
+        }
+        else
+        {
+            runAway();
         }
     });
+}
+
+// this function runs when you attack an enemy
+function attack()
+{
+    console.log("ok this is epic");
+}
+
+// function to guard (more defensive)
+function guard()
+{
+    console.log("guard");
+}
+
+// function to print stats
+function displayInfo()
+{
+    console.log("print all the stats")
+}
+
+// function to run away
+function runAway()
+{
+    console.log("Run away!")
 }
