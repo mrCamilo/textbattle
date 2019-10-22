@@ -1,5 +1,6 @@
 // Load inquirer for battle options (attack, block, items, printInfo, run)
 var inquirer = require("inquirer");
+const chalk = require('chalk')
 
 // Game 
 // At the start of the game call create character function
@@ -7,8 +8,8 @@ createChar();
 
 // Create a character at the start of the game: asks name, gender, and class
 function createChar() {
-    console.log("Welcome to the start of your adventure!");
-    console.log("Before we start, I just have a few questions...");
+    console.log(chalk.yellow("Welcome to the start of your adventure!"));
+    console.log(chalk.green("Before we start, I just have a few questions..."));
     inquirer.prompt
         ([
             {
@@ -63,5 +64,19 @@ function createChar() {
 
 // Run this function for every battle
 function battle() {
-    console.log("Battle Start")
+    console.log("Battle Start!!")
+    inquirer.prompt
+    ([
+        {
+            type: "list",
+            name: "Menu",
+            choices: ["Attack!", "Guard!", "Enemy Info!", "Run away!"]
+        }
+    ]).then(function (battleChoices)
+    {
+        if (battleChoices.choices === "Attack!") 
+        {
+            console.log("aaaa");
+        }
+    });
 }

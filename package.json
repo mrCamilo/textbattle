@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mrCamilo/textbattle#readme",
   "dependencies": {
+    "chalk": "^2.4.2",
     "inquirer": "^7.0.0"
   }
 }
