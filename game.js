@@ -3,12 +3,23 @@ var inquirer = require("inquirer");
 const chalk = require('chalk')
 // initialized at 0 but are changed after class is chosen
 var player = {
+    name: "",
+    class: "",
     strength: 0,
     hitpoints: 0,
-    strength: 0,
     defense: 0,
     luck: 0
 }
+
+var enemy = {
+    name: "",
+    strength: 6,
+    hitpoints: 1200,
+    defense: 0,
+    luck: 0
+}
+
+var readlineSync = require('readline-sync');
 
 // Game
 game();
@@ -46,26 +57,29 @@ function game() {
 
             }
             else if (charStats.class === "Mage") {
-                hitpoints = 50;
-                strength = 3;
-                defense = 4;
-                luck = 30;
+                player.hitpoints = 50;
+                player.strength = 3;
+                player.defense = 4;
+                player.luck = 30;
             }
             else if (charStats.class === "Monk") {
-                hitpoints = 90;
-                strength = 6;
-                defense = 5;
-                luck = 2;
+                player.hitpoints = 90;
+                player.strength = 6;
+                player.defense = 5;
+                player.luck = 2;
             }
             else // Thief
             {
-                hitpoints = 40;
-                strength = 4;
-                defense = 2;
-                luck = 5;
+                player.hitpoints = 40;
+                player.strength = 4;
+                player.defense = 2;
+                player.luck = 5;
             }
-
+            // Sets name and class equal to whatever was chosen above
+            player.name = charStats.name;
+            player.class = charStats.class;
             // Once the character is set up, the first battle can start
+            startBattle();
             battle();
         }
         );
@@ -74,17 +88,47 @@ function game() {
 
 // The names of random enemies are stored here, which are used in the battle function
 function randomEnemy() {
-    var enemyName = ["", "Chocobo", "Crawler", "Dragon", "Slime"];
-    var random = Math.floor(Math.random() * (+5 - +1) + +1);
-    return enemyName[random];
+    var enemyArray = ["", "Chocobo", "Crawler", "Dragon", "Slime"];
+    thisEnemy = enemyArray[Math.floor(Math.random() * (+5 - +1) + +1)]; // pick a random enemy from this array
+    enemy.name = thisEnemy;
+    return thisEnemy;
 }
 
 
 // Run this function for every battle
 function battle() {
-    var enemy = randomEnemy();
-    console.log("You encountered a " + enemy + "!"); // This text should only appear ONCE, at the start of the battle
-    console.log(chalk.red("Battle Start!"));
+    // when the battle is over it prints results
+    if (enemy.hitpoints <= 0 || player.hitpoints <= 0) {
+        var results = results();
+        return results;
+    }
+
+    // this function shows results after a battle
+    function results() {
+        // if player hitpoints are less than or equal to 0 (dead), console log GAME OVER and start over...
+        if (player.hitpoints <= 0) {
+            console.log(player.name + " has fallen!");
+            inquirer.prompt
+                ([
+                    {
+                        type: "list",
+                        name: "game over",
+                        message: "New Game?",
+                        choices: ["Yes", "No"]
+                    }
+                ]).then(function (summary) {
+                    if (summary.choices === "Yes!") {
+                        console.log("Restarting...");
+                    }
+                    else { //game over screen
+                        console.log(player.name + "'s journey has come to an end.");
+                        console.log(chalk.red("GAME OVER"));
+                    }
+                });
+        }
+    }
+
+    // if battle is NOT over, continue printing this options menu
     inquirer.prompt
         ([
             {
@@ -107,12 +151,15 @@ function battle() {
 
 // this function goes when you attack an enemy
 function attack() {
-    var damage = 4;
-    console.log("Dealt " + damage + " damage to the enemy.");
-    player.hitpoints -= damage;
-    // console.log(game.name + "HP:" + hp);
-    console.log("Strength: " + player.strength);
-    console.log("Hitpoints: " + player.hitpoints);
+    console.log("Dealt " + player.strength + " damage to the enemy.");
+    enemy.hitpoints -= player.strength; // subtract damage
+    showEnemyHP();
+    // enemy turn
+    console.log(enemy.name + " attacks!");
+    console.log(enemy.name + " deals " + enemy.strength + " damage to the " + player.class);
+    player.hitpoints -= player.strength;
+    showPlayerHP();
+    battle();
 }
 
 // function to guard
@@ -133,9 +180,24 @@ function runAway() {
         case 1:
             console.log("You failed to escape! Take " + damage + " points of damage!!");
             console.log("The battle continues...");
-            battle();
             player.hitpoints -= damage;
             console.log(player.hitpoints)
+            battle();
             break;
     }
+}
+
+// functions to show HP every turn
+function showPlayerHP() {
+    console.log(player.name + " HP: " + player.hitpoints);
+}
+function showEnemyHP() {
+    console.log(enemy.name + " HP: " + enemy.hitpoints);
+}
+
+// function to start battle (shows "enemy text" and "battle start")
+function startBattle() {
+    var enemy = randomEnemy();
+    console.log(player.name + " the " + player.class + " encountered a " + enemy + "!");
+    console.log(chalk.red("Battle Start!"));
 }
