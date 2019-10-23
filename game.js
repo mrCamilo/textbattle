@@ -1,13 +1,15 @@
 // Load inquirer for battle options (attack, block, items, printInfo, run)
 var inquirer = require("inquirer");
 const chalk = require('chalk')
+var hitpoints = 30;
+var enemyhitpoints = 40;
 
 // Game 
 // At the start of the game call create character function
-createChar();
+game();
 
 // Create a character at the start of the game: asks name, gender, and class
-function createChar() {
+function game() {
     console.log(chalk.yellow("Welcome to the start of your adventure!"));
     console.log(chalk.green("Before we start, I just have a few questions..."));
     inquirer.prompt
@@ -57,64 +59,81 @@ function createChar() {
                 var luck = 50;
             }
 
-            // Once the character is called, the first battle can start
+            // Once the character is set up, the first battle can start
             battle();
-            
-        });
-    
+        }
+        );
+
+}
+
+// The names of random enemies are stored here, which are used in the battle function
+function randomEnemy()
+{
+    var enemyName = ["", "Chocobo", "Crawler", "Dragon", "Diver Nest"];
+    var random = Math.floor(Math.random() * (+5 - +1) + +1);
+    return enemyName[random];
 }
 
 // Run this function for every battle
-function battle() {
-    console.log("Battle Start!!")
+function battle(enemyName) 
+{
+    var enemyName = randomEnemy();
+    console.log("You encountered a " + enemyName + "!");
+    console.log(chalk.red("Battle Start!"));
     inquirer.prompt
-    ([
-        {
-            type: "list",
-            name: "Menu",
-            choices: ["Attack!", "Guard!", "Enemy Info!", "Run away!"]
-        }
-    ]).then(function (battleChoices)
-    {
-        if (battleChoices.Menu === "Attack!") 
-        {
-            attack();
-        }
-        else if (battleChoices.Menu === "Guard!")
-        {
-            guard();
-        }
-        else if (battleChoices.Menu === "Enemy Info!")
-        {
-            displayInfo();
-        }
-        else
-        {
-            runAway();
-        }
-    });
+        ([
+            {
+                type: "list",
+                name: "Menu",
+                choices: ["Attack!", "Guard!", "Enemy Info!", "Run away!"]
+            }
+        ]).then(function (battleChoices) {
+            if (battleChoices.Menu === "Attack!") {
+                attack();
+            }
+            else if (battleChoices.Menu === "Guard!") {
+                guard();
+            }
+            else if (battleChoices.Menu === "Enemy Info!") {
+                displayInfo();
+            }
+            else {
+                runAway();
+            }
+        });
 }
 
-// this function runs when you attack an enemy
-function attack()
-{
-    console.log("ok this is epic");
+// this function goes when you attack an enemy
+function attack() {
+    console.log("ATACK!!!!!!!");
 }
 
 // function to guard (more defensive)
-function guard()
-{
+function guard() {
     console.log("guard");
 }
 
 // function to print stats
-function displayInfo()
-{
+function displayInfo() {
     console.log("print all the stats")
 }
 
 // function to run away
-function runAway()
-{
-    console.log("Run away!")
+function runAway() {
+    var dealDamage = 4;
+    // theres a 50% chance of escaping, but you take some damage if you fail to run away
+    switch (Math.floor(Math.random() * 2)) {
+        // Successful Escape attempt
+        case 0:
+            console.log("You narrowly escaped!")
+            break;
+        // failed escape (battle continues)
+        case 1:
+            console.log("You failed to escape! Take " + dealDamage + " points of damage!!");
+            console.log("The battle continues...");
+            battle();
+            hitpoints -= dealDamage;
+            console.log(hitpoints)
+            break;
+    }
 }
