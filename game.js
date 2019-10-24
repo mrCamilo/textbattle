@@ -14,12 +14,10 @@ var player = {
 var enemy = {
     name: "",
     strength: 6,
-    hitpoints: 1200,
+    hitpoints: 12,
     defense: 0,
     luck: 0
 }
-
-var readlineSync = require('readline-sync');
 
 // Game
 game();
@@ -80,10 +78,19 @@ function game() {
             player.class = charStats.class;
             // Once the character is set up, the first battle can start
             startBattle();
-            battle();
         }
+
+        
         );
 
+    // function to start battle (shows "enemy text" and "battle start")
+    function startBattle() {
+        console.log(player.name + " moves further into the dungeon...");
+        var enemy = randomEnemy();
+        console.log(player.name + " the " + player.class + " encountered a " + enemy + "!");
+        console.log(chalk.red("Battle Start!"));
+        battle();
+    }
 }
 
 // The names of random enemies are stored here, which are used in the battle function
@@ -103,7 +110,7 @@ function battle() {
         return results;
     }
 
-    // this function shows results after a battle
+    // this function shows results if a battle ends
     function results() {
         // if player hitpoints are less than or equal to 0 (dead), console log GAME OVER and start over...
         if (player.hitpoints <= 0) {
@@ -126,6 +133,15 @@ function battle() {
                     }
                 });
         }
+
+        // if the enemy has 0 hp, then end the battle and move onto the next one
+        if (enemy.hitpoints <= 0) {
+            console.log(player.name + " has defeated the " + enemy.name)
+            console.log("Gained " + chalk.blue("50") + " experience points!")
+            // then this function is called to move onto the next battle
+            startBattle();
+        }
+
     }
 
     // if battle is NOT over, continue printing this options menu
@@ -156,7 +172,7 @@ function attack() {
     showEnemyHP();
     // enemy turn
     console.log(enemy.name + " attacks!");
-    console.log(enemy.name + " deals " + enemy.strength + " damage to the " + player.class);
+    console.log(enemy.name + " deals " + enemy.strength + " damage to " + player.name);
     player.hitpoints -= player.strength;
     showPlayerHP();
     battle();
@@ -195,9 +211,15 @@ function showEnemyHP() {
     console.log(enemy.name + " HP: " + enemy.hitpoints);
 }
 
-// function to start battle (shows "enemy text" and "battle start")
-function startBattle() {
-    var enemy = randomEnemy();
-    console.log(player.name + " the " + player.class + " encountered a " + enemy + "!");
-    console.log(chalk.red("Battle Start!"));
-}
+
+// // function to start battle (shows "enemy text" and "battle start")
+// function startBattle() {
+//     var enemy = randomEnemy();
+//     console.log(player.name + " the " + player.class + " encountered a " + enemy + "!");
+//     console.log(chalk.red("Battle Start!"));
+// }
+
+// function anotherBattle() {
+//     console.log(player.name + " moves further into the dungeon...");
+//     startBattle(); // generate the enemy name...
+// }
