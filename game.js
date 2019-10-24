@@ -20,10 +20,10 @@ var enemy = {
 }
 
 // Game
-game();
+// game();
 
 // Create a character at the start of the game: asks name, gender, and class
-function game() {
+// function game() {
     console.log(chalk.yellow("Welcome to the start of your adventure!"));
     console.log(chalk.green("Before we start, I just have a few questions..."));
     inquirer.prompt
@@ -85,13 +85,13 @@ function game() {
 
     // function to start battle (shows "enemy text" and "battle start")
     function startBattle() {
-        console.log(player.name + " moves further into the dungeon...");
+        //anotherBattle();
         var enemy = randomEnemy();
         console.log(player.name + " the " + player.class + " encountered a " + enemy + "!");
         console.log(chalk.red("Battle Start!"));
         battle();
     }
-}
+//}
 
 // The names of random enemies are stored here, which are used in the battle function
 function randomEnemy() {
@@ -139,7 +139,7 @@ function battle() {
             console.log(player.name + " has defeated the " + enemy.name)
             console.log("Gained " + chalk.blue("50") + " experience points!")
             // then this function is called to move onto the next battle
-            startBattle();
+            anotherBattle();
         }
 
     }
@@ -219,7 +219,8 @@ function showEnemyHP() {
 //     console.log(chalk.red("Battle Start!"));
 // }
 
-// function anotherBattle() {
-//     console.log(player.name + " moves further into the dungeon...");
-//     startBattle(); // generate the enemy name...
-// }
+function anotherBattle() {
+    console.log(player.name + " moves further into the dungeon...");
+    enemy.hitpoints= 20;
+    startBattle(); // generate the enemy name...
+}
