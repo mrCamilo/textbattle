@@ -108,7 +108,7 @@ function startBattle() {
     }
     // Reset the enemy HP in this area, and say what the enemy is
     var enemy = randomEnemy();
-    console.log(player.name + " the " + player.class + " encountered a " + enemy.name + "!");
+    console.log(player.name + " the " + player.class + " encountered a " + Enemy.name + "!");
     console.log(chalk.red("Battle Start!"));
     battleMenu();
 }
@@ -132,8 +132,8 @@ function battleMenu() {
 
 
     // if the enemy has 0 hp, then end the battle and move onto the next one
-    if (enemy.hitpoints <= 0) {
-        console.log(chalk.blue(player.name + " has defeated the " + enemy.name));
+    if (Enemy.hitpoints <= 0) {
+        console.log(chalk.blue(player.name + " has defeated the " + Enemy.name));
         console.log("Gained " + chalk.blue("50") + " experience points!");
         numBattles++;
         // then this function is called to move onto the next battle
@@ -166,17 +166,17 @@ function battleMenu() {
 // this function goes when you attack an enemy
 function attack() {
     console.log("Dealt " + player.strength + " damage to the enemy.");
-    enemy.hitpoints -= player.strength; // subtract damage
+    Enemy.hitpoints -= player.strength; // subtract damage
     showEnemyHP();
     // enemy turn
-    console.log(enemy.name + " attacks!");
-    console.log(enemy.name + " deals " + enemy.strength + " damage to " + player.name);
+    console.log(Enemy.name + " attacks!");
+    console.log(Enemy.name + " deals " + Enemy.strength + " damage to " + player.name);
     player.hitpoints -= player.strength;
     showPlayerHP();
-    if (enemy.hitpoints > 0 && player.hitpoints > 0) {
+    if (Enemy.hitpoints > 0 && player.hitpoints > 0) {
         battleMenu();
     }
-    if (enemy.hitpoints <= 0 || player.hitpoints <= 0) {
+    if (Enemy.hitpoints <= 0 || player.hitpoints <= 0) {
         startBattle();
     }
 }
@@ -211,7 +211,7 @@ function showPlayerHP() {
     console.log(player.name + " HP: " + player.hitpoints);
 }
 function showEnemyHP() {
-    console.log(enemy.name + " HP: " + enemy.hitpoints);
+    console.log(Enemy.name + " HP: " + Enemy.hitpoints);
 }
 
 function gameOver() {

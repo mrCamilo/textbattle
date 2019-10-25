@@ -84,11 +84,9 @@ inquirer.prompt
 
 // function to start battle (shows "enemy text" and "battle start")
 function startBattle() {
-    console.log(numBattles);
-    if (numBattles > 0) {
+    if (numBattles > 0) { // display this text after every battle except for the first
         console.log(chalk.yellow("VICTORY!"));
         console.log(player.name + " moves further into the dungeon...");
-        numBattles++;
     }
 
     // if player hitpoints are less than or equal to 0 (dead), console log GAME OVER and end game...
@@ -101,6 +99,7 @@ function startBattle() {
     console.log(player.name + " the " + player.class + " encountered a " + enemyname + "!");
     console.log(chalk.red("Battle Start!"));
     battleMenu();
+    numBattles++;
 }
 
 // The names of random enemies are stored here, which are used in the battle function
