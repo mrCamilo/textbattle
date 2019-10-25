@@ -86,11 +86,16 @@ inquirer.prompt
 function startBattle() {
     console.log(numBattles);
     if (numBattles > 0) {
-    console.log(chalk.yellow("VICTORY!"));
-    console.log(player.name + " moves further into the dungeon...");
-    numBattles++;
-}
-    // Reset the enemy HP in this area
+        console.log(chalk.yellow("VICTORY!"));
+        console.log(player.name + " moves further into the dungeon...");
+        numBattles++;
+    }
+
+    // if player hitpoints are less than or equal to 0 (dead), console log GAME OVER and end game...
+    if (player.hitpoints <= 0) {
+        gameOver();
+    }
+    // Reset the enemy HP in this area, and say what the enemy is
     enemy.hitpoints = 20;
     var enemyname = randomEnemy();
     console.log(player.name + " the " + player.class + " encountered a " + enemyname + "!");
@@ -109,6 +114,8 @@ function randomEnemy() {
 
 // Run this function for every battle
 function battleMenu() {
+    
+
     // if the enemy has 0 hp, then end the battle and move onto the next one
     if (enemy.hitpoints <= 0) {
         console.log(chalk.blue(player.name + " has defeated the " + enemy.name));
@@ -137,11 +144,8 @@ function battleMenu() {
                 runAway();
             }
         });
-    
-    // if player hitpoints are less than or equal to 0 (dead), console log GAME OVER and start over...
-    if (player.hitpoints <= 0) {
-        gameOver();
-    }
+
+
 }
 
 // this function goes when you attack an enemy
@@ -196,13 +200,9 @@ function showEnemyHP() {
 }
 
 function gameOver() {
-    var x = 1;
-    switch (x) {
-        case 1:
-                console.log(player.name + " has fallen!");
-                console.log(player.name + "'s journey has come to an end.");
-                showPlayerHP();
-                console.log(chalk.red("GAME OVER"));
-            }break
-    }
-    
+    console.log(player.name + " has fallen!");
+    console.log(player.name + "'s journey has come to an end.");
+    showPlayerHP();
+    console.log(chalk.red("GAME OVER"));
+    process.exit();
+}
